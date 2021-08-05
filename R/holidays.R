@@ -173,23 +173,26 @@ Holidays <- function(...) {
 #'@param a holidays calender specification constructed by [Holidays()]
 #'@param startingDate a [Date] or a character to coerce to a Date being the first day as from which the matrix is made
 #'@param length [integer] the number of days to include
-#'@param type [character] specific treatment of sundays, days around working days ... See JDemetra.
+#'@param nonworking [integer] An array with the non working days (Mondays=1,...,Saturdays=6, Sundays=7). Usually 7, or c(6,7)
+#'@param type [character] specific treatment of non working days around working days ... See JDemetra.
 #'
 #'@return JDMatrix which is a named list containing the regression matrix created in JDemetra. In addition it contains the used arguments to construct it.
 #'
 #'@export
-HolidaysMatrix<-function(holidays, startingDate, length, type=c("Default", "SkipSundays", "NextWorkingDay", "PreviousWorkingDay")){
+HolidaysMatrix<-function(holidays, startingDate, length, nonworking=as.integer(7), type=c("Default", "Skip", "NextWorkingDay", "PreviousWorkingDay")){
   if (is.character(startingDate)) startingDate <- as.Date(startingDate)
 
   # TODO : is it limited to dates??
   checkmate::assertDate(startingDate, len = 1, null.ok = F)
   checkmate::assertInteger(length, len = 1, null.ok = F)
+  checkmate::assertInteger(nonworking, lower=1, upper = 7,min.len = 1, max.len = 3, null.ok = F)
   checkmate::assertClass(holidays, classes = "Holidays", null.ok = F)
   type <- match.arg(type)
 
   jm <- .jcall(holidays$ptr@internal, "Ldemetra/math/matrices/MatrixType;", "holidays",
                format(startingDate, "%Y-%m-%d"),
                as.integer(length),
+               .jarray(as.integer(nonworking)),
                type)
 
   return(structure(list(

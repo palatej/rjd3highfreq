@@ -19,11 +19,11 @@ stl<-function(y, period, multiplicative=TRUE, swindow=7, twindow=0, robust=TRUE)
   jrslt<-.jcall("demetra/stl/r/StlDecomposition", "Ldemetra/math/matrices/MatrixType;", "process", as.numeric(y), as.integer(period), multiplicative, as.integer(swindow), as.integer(twindow), robust)
   m<-matrix_jd2r(jrslt)
   decomposition<-list(
-    y=as.numeric(y),
-    t=m[,1],
+    y=m[,1],
     sa=m[,2],
-    s=m[,3],
-    i=m[,4]
+    t=m[,3],
+    s=m[,4],
+    i=m[,5]
   )
   parameters<-list(
     multiplicative=multiplicative, 

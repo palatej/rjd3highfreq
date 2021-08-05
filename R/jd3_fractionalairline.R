@@ -2,6 +2,21 @@
 #' @import rJava
 NULL
 
+ucm_extract<-function(jrslt, cmp){
+  path<-paste0("ucarima.component(", cmp,")")
+  return (arima_extract(jrslt, path))
+}
+
+arima_extract<-function(jrslt, path){
+  str<-proc_str(jrslt, paste0(path, ".name"))
+  ar<-proc_vector(jrslt, paste0(path, ".ar"))
+  delta<-proc_vector(jrslt, paste0(path, ".delta"))
+  ma<-proc_vector(jrslt, paste0(path, ".ma"))
+  var<-proc_numeric(jrslt, paste0(path, ".var"))
+  return (rjd3modelling::arima(str, ar,delta,ma,var))
+}
+
+
 
 #' Title
 #'
@@ -17,13 +32,220 @@ NULL
 #' @export
 #'
 #' @examples
-fractionalAirlineDecomposition<-function(y, period, adjust=T, sn=F, stde=F, nbcasts=0, nfcasts=0){
+fractionalAirlineDecomposition<-function(y, period, sn=F, stde=F, nbcasts=0, nfcasts=0){
   checkmate::assertNumeric(y, null.ok = F)
   checkmate::assertNumeric(period, len = 1, null.ok = F)
-  checkmate::assertLogical(adjust, len = 1, null.ok = F)
   checkmate::assertLogical(sn, len = 1, null.ok = F)
   jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineDecomposition;", "decompose", as.numeric(y), 
-                period, adjust, sn, stde, as.integer(nbcasts), as.integer(nfcasts))
+                period, sn, stde, as.integer(nbcasts), as.integer(nfcasts))
+  return (jd2r_fractionalAirlineDecomposition(jrslt, sn, stde))  
+}
+
+#' Title
+#'
+#' @param y 
+#' @param periods 
+#' @param ndiff 
+#' @param stde 
+#' @param nbcasts 
+#' @param nfcasts 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+multiAirlineDecomposition<-function(y, periods, ndiff=2, stde=F, nbcasts=0, nfcasts=0){
+  if (length(periods) == 1){
+    return (fractionalAirlineDecomposition(y, periods, stde=stde, nbcasts = nbcasts, nfcasts = nfcasts))
+  }
+  checkmate::assertNumeric(y, null.ok = F)
+  
+  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineDecomposition;", "decompose", as.numeric(y), 
+                .jarray(periods), as.integer(ndiff), stde, as.integer(nbcasts), as.integer(nfcasts))
+  
+  if (length(periods) == 1){
+    return (jd2r_fractionalAirlineDecomposition(jrslt, F, stde))
+  }else{
+    return (jd2r_multiAirlineDecomposition(jrslt, stde))
+  }
+}
+
+#' Title
+#'
+#' @param y 
+#' @param periods 
+#' @param x 
+#' @param mean 
+#' @param outliers 
+#' @param criticalValue 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+fractionalAirlineEstimation<-function(y, periods, x = NULL, ndiff=2, mean = FALSE, outliers=NULL, criticalValue=6, precision=1e-12, approximateHessian=F){
+  checkmate::assertNumeric(y, null.ok = F)
+  checkmate::assertNumeric(criticalValue, len = 1, null.ok = F)
+  checkmate::assertNumeric(precision, len = 1, null.ok = F)
+  checkmate::assertLogical(mean, len = 1, null.ok = F)
+  if (is.null(outliers))
+    joutliers<-.jnull("[Ljava/lang/String;")
+  else
+    joutliers=.jarray(outliers, "java.lang.String")
+  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineEstimation;", "estimate", as.numeric(y), matrix_r2jd(x), mean, .jarray(periods), as.integer(ndiff), joutliers
+                , criticalValue, precision, approximateHessian)
+  model<-list(
+    y=as.numeric(y),
+    variables=proc_vector(jrslt, "variables"),
+    X=proc_matrix(jrslt, "regressors"),
+    b=proc_vector(jrslt, "b"),
+    bcov=proc_matrix(jrslt, "bvar"),
+    linearized=proc_vector(jrslt, "lin")
+  )
+  estimation<-list(
+    parameters=proc_vector(jrslt, "parameters"),
+    score=proc_vector(jrslt, "score"),
+    covariance=proc_matrix(jrslt, "pcov")
+  )
+  likelihood<-proc_likelihood(jrslt, "likelihood.")
+  
+  return(structure(list(
+    model=model,
+    estimation=estimation,
+    likelihood=likelihood),
+    class="JDFractionalAirlineEstimation"))
+  
+}
+
+#' Title
+#'
+#' @param y 
+#' @param periods 
+#' @param ndiff 
+#' @param stde 
+#' @param nbcasts 
+#' @param nfcasts 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+multiAirlineDecomposition.raw<-function(y, periods, ndiff=2, stde=F, nbcasts=0, nfcasts=0){
+  checkmate::assertNumeric(y, null.ok = F)
+  
+  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineDecomposition;", "decompose", as.numeric(y), 
+                .jarray(periods), as.integer(ndiff), stde, as.integer(nbcasts), as.integer(nfcasts))
+  
+  return (jrslt)
+}
+
+#' Title
+#'
+#' @param jdecomp 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+multiAirlineDecomposition.ssf<-function(jdecomp){
+  jssf<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/ssf/extractors/SsfUcarimaEstimation;", "ssfDetails", jdecomp)
+  return (new(Class= "JD3_ProcResults", internal=jssf))
+}
+
+#' Title
+#'
+#' @param y 
+#' @param period 
+#' @param sn 
+#' @param stde 
+#' @param nbcasts 
+#' @param nfcasts 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+fractionalAirlineDecomposition.raw<-function(y, period, sn=F, stde=F, nbcasts=0, nfcasts=0){
+  checkmate::assertNumeric(y, null.ok = F)
+  checkmate::assertNumeric(period, len = 1, null.ok = F)
+  checkmate::assertLogical(sn, len = 1, null.ok = F)
+  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineDecomposition;", "decompose", as.numeric(y), 
+                period, sn, stde, as.integer(nbcasts), as.integer(nfcasts))
+  return (jrslt)
+}
+
+#' Title
+#'
+#' @param jdecomp 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+fractionalAirlineDecomposition.ssf<-function(jdecomp){
+  jssf<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/ssf/extractors/SsfUcarimaEstimation;", "ssfDetails", jdecomp)
+  return (new(Class= "JD3_ProcResults", internal=jssf))
+}
+
+
+#' Title
+#'
+#' @param jrslt 
+#' @param stde 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+jd2r_multiAirlineDecomposition<-function(jrslt, stde=F){
+  
+  #ucarima model
+  ncmps<-proc_int(jrslt, "ucarima.size")
+  model<-arima_extract(jrslt, "ucarima.model")
+  cmps<-lapply(1:ncmps, function(cmp){return (ucm_extract(jrslt, cmp))})
+  ucarima<-rjd3modelling::ucarima(model, cmps)
+  
+  yc<-proc_vector(jrslt, "y")
+  estimation<-list(
+    parameters=proc_vector(jrslt, "parameters"),
+    score=proc_vector(jrslt, "score"),
+    covariance=proc_matrix(jrslt, "pcov")
+  )
+  likelihood<-proc_likelihood(jrslt, "likelihood.")
+  ncmps<-proc_int(jrslt, "ncmps")
+  if (stde){
+    decomposition<-lapply((1:ncmps), function(j){return (cbind(proc_vector(jrslt, paste0("cmp(",j, ")")),
+                                                               proc_vector(jrslt, paste0("cmp_stde(",j, ")"))  ))})
+    decomposition<-list(cmps=cmps, cmps.stde=cmps.stde)
+  }else{
+    decomposition<-lapply((1:ncmps), function(j){return (proc_vector(jrslt, paste0("cmp(",j, ")")))})
+  }
+  
+  return(structure(list(
+    ucarima=ucarima,
+    decomposition=decomposition,
+    estimation=estimation,
+    likelihood=likelihood),
+    class="JDFractionalAirlineDecomposition"))
+}
+
+
+#' Title
+#'
+#' @param jrslt 
+#' @param sn 
+#' @param stde 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+jd2r_fractionalAirlineDecomposition<-function(jrslt, sn=F, stde=F){
+  #ucarima model
+  ncmps<-proc_int(jrslt, "ucarima.size")
+  model<-arima_extract(jrslt, "ucarima.model")
+  cmps<-lapply(1:ncmps, function(cmp){return (ucm_extract(jrslt, cmp))})
+  ucarima<-rjd3modelling::ucarima(model, cmps)
   
   yc<-proc_vector(jrslt, "y")
   sa<-proc_vector(jrslt, "sa")
@@ -76,57 +298,10 @@ fractionalAirlineDecomposition<-function(y, period, adjust=T, sn=F, stde=F, nbca
   likelihood<-proc_likelihood(jrslt, "likelihood.")
   
   return(structure(list(
-                   decomposition=decomposition,
-                   estimation=estimation,
-                   likelihood=likelihood),
-         class="JDFractionalAirlineDecomposition"))
-}
-
-
-#' Title
-#'
-#' @param y 
-#' @param periods 
-#' @param x 
-#' @param mean 
-#' @param outliers 
-#' @param criticalValue 
-#'
-#' @return
-#' @export
-#'
-#' @examples
-fractionalAirlineEstimation<-function(y, periods, x = NULL, mean = FALSE, outliers=NULL, criticalValue=6, precision=1e-12, approximateHessian=F){
-  checkmate::assertNumeric(y, null.ok = F)
-  checkmate::assertNumeric(criticalValue, len = 1, null.ok = F)
-  checkmate::assertNumeric(precision, len = 1, null.ok = F)
-  checkmate::assertLogical(mean, len = 1, null.ok = F)
-  if (is.null(outliers))
-    joutliers<-.jnull("[Ljava/lang/String;")
-  else
-    joutliers=.jarray(outliers, "java.lang.String")
-  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineEstimation;", "estimate", as.numeric(y), matrix_r2jd(x), mean, .jarray(periods), joutliers
-                , criticalValue, precision, approximateHessian)
-  model<-list(
-    y=as.numeric(y),
-    variables=proc_vector(jrslt, "variables"),
-    X=proc_matrix(jrslt, "regressors"),
-    b=proc_vector(jrslt, "b"),
-    bcov=proc_matrix(jrslt, "bvar"),
-    linearized=proc_vector(jrslt, "lin")
-  )
-  estimation<-list(
-    parameters=proc_vector(jrslt, "parameters"),
-    score=proc_vector(jrslt, "score"),
-    covariance=proc_matrix(jrslt, "pcov")
-  )
-  likelihood<-proc_likelihood(jrslt, "likelihood.")
-  
-  return(structure(list(
-    model=model,
+    ucarima=ucarima,
+    decomposition=decomposition,
     estimation=estimation,
     likelihood=likelihood),
-    class="JDFractionalAirlineEstimation"))
+    class="JDFractionalAirlineDecomposition"))
 }
-
 

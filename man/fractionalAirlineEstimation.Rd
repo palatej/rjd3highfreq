@@ -8,6 +8,7 @@ fractionalAirlineEstimation(
   y,
   periods,
   x = NULL,
+  ndiff = 2,
   mean = FALSE,
   outliers = NULL,
   criticalValue = 6,

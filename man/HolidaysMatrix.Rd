@@ -8,7 +8,8 @@ HolidaysMatrix(
   holidays,
   startingDate,
   length,
-  type = c("Default", "SkipSundays", "NextWorkingDay", "PreviousWorkingDay")
+  nonworking = as.integer(7),
+  type = c("Default", "Skip", "NextWorkingDay", "PreviousWorkingDay")
 )
 }
 \arguments{
@@ -16,7 +17,9 @@ HolidaysMatrix(
 
 \item{length}{[integer] the number of days to include}
 
-\item{type}{[character] specific treatment of sundays, days around working days ... See JDemetra.}
+\item{nonworking}{[integer] An array with the non working days (Mondays=1,...,Saturdays=6, Sundays=7). Usually 7, or c(6,7)}
+
+\item{type}{[character] specific treatment of non working days around working days ... See JDemetra.}
 
 \item{a}{holidays calender specification constructed by [Holidays()]}
 }
