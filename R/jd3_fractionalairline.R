@@ -13,7 +13,7 @@ arima_extract<-function(jrslt, path){
   delta<-proc_vector(jrslt, paste0(path, ".delta"))
   ma<-proc_vector(jrslt, paste0(path, ".ma"))
   var<-proc_numeric(jrslt, paste0(path, ".var"))
-  return (rjd3modelling::arima(str, ar,delta,ma,var))
+  return (rjd3modelling::arima.model(str, ar,delta,ma,var))
 }
 
 
@@ -203,7 +203,7 @@ jd2r_multiAirlineDecomposition<-function(jrslt, stde=F){
   ncmps<-proc_int(jrslt, "ucarima.size")
   model<-arima_extract(jrslt, "ucarima.model")
   cmps<-lapply(1:ncmps, function(cmp){return (ucm_extract(jrslt, cmp))})
-  ucarima<-rjd3modelling::ucarima(model, cmps)
+  ucarima<-rjd3modelling::ucarima.model(model, cmps)
   
   yc<-proc_vector(jrslt, "y")
   estimation<-list(
@@ -245,7 +245,7 @@ jd2r_fractionalAirlineDecomposition<-function(jrslt, sn=F, stde=F){
   ncmps<-proc_int(jrslt, "ucarima.size")
   model<-arima_extract(jrslt, "ucarima.model")
   cmps<-lapply(1:ncmps, function(cmp){return (ucm_extract(jrslt, cmp))})
-  ucarima<-rjd3modelling::ucarima(model, cmps)
+  ucarima<-rjd3modelling::ucarima.model(model, cmps)
   
   yc<-proc_vector(jrslt, "y")
   sa<-proc_vector(jrslt, "sa")
