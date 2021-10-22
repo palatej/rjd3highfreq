@@ -102,8 +102,8 @@ proc_data<-function(rslt, name){
     return(ts_jd2r(.jcast(s,"demetra/timeseries/TsData")))
   else if (.jinstanceof(s, "java/lang/Number"))
     return (.jcall(s, "D", "doubleValue"))
-  else if (.jinstanceof(s, "demetra/math/matrices/MatrixType"))
-    return(matrix_jd2r(.jcast(s,"demetra/math/matrices/MatrixType")))
+  else if (.jinstanceof(s, "demetra/math/matrices/Matrix"))
+    return(matrix_jd2r(.jcast(s,"demetra/math/matrices/Matrix")))
   else if (.jinstanceof(s, "demetra/data/Parameter")){
     val<-.jcall(s, "D", "getValue")
      return (c(val))

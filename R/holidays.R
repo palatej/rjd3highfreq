@@ -189,7 +189,7 @@ HolidaysMatrix<-function(holidays, startingDate, length, nonworking=as.integer(7
   checkmate::assertClass(holidays, classes = "Holidays", null.ok = F)
   type <- match.arg(type)
 
-  jm <- .jcall(holidays$ptr@internal, "Ldemetra/math/matrices/MatrixType;", "holidays",
+  jm <- .jcall(holidays$ptr@internal, "Ldemetra/math/matrices/Matrix;", "holidays",
                format(startingDate, "%Y-%m-%d"),
                as.integer(length),
                .jarray(as.integer(nonworking)),

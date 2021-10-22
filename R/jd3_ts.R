@@ -36,10 +36,10 @@ matrix_jd2r<-function(s){
 
 matrix_r2jd<-function(s){
   if (is.null(s))
-    return (.jnull("demetra/math/matrices/MatrixType"))
+    return (.jnull("demetra/math/matrices/Matrix"))
   if (!is.matrix(s)){
     s<-matrix(s, nrow=length(s), ncol=1)
   }
   sdim<-dim(s)
-  return (.jcall("demetra/math/matrices/MatrixType","Ldemetra/math/matrices/MatrixType;", "of", as.double(s), as.integer(sdim[1]), as.integer(sdim[2])))
+  return (.jcall("demetra/math/matrices/Matrix","Ldemetra/math/matrices/Matrix;", "of", as.double(s), as.integer(sdim[1]), as.integer(sdim[2])))
 }

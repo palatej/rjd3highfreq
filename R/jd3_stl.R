@@ -16,7 +16,7 @@ NULL
 #'
 #' @examples
 stl<-function(y, period, multiplicative=TRUE, swindow=7, twindow=0, robust=TRUE){
-  jrslt<-.jcall("demetra/stl/r/StlDecomposition", "Ldemetra/math/matrices/MatrixType;", "process", as.numeric(y), as.integer(period), multiplicative, as.integer(swindow), as.integer(twindow), robust)
+  jrslt<-.jcall("demetra/stl/r/StlDecomposition", "Ldemetra/math/matrices/Matrix;", "process", as.numeric(y), as.integer(period), multiplicative, as.integer(swindow), as.integer(twindow), robust)
   m<-matrix_jd2r(jrslt)
   decomposition<-list(
     y=m[,1],
