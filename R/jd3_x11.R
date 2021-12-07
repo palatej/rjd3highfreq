@@ -1,4 +1,3 @@
-#' @include jd3_rslts.R
 #' @import rJava
 NULL
 
@@ -36,10 +35,10 @@ x11<-function(y, period, mul=TRUE, trend.horizon=6, trend.degree=2,
                 tkernel, asym, seas0, seas1, extreme.lsig, extreme.usig)
   decomposition<-list(
     y=as.numeric(y),
-    t=proc_vector(jrslt, "d12"),
-    sa=proc_vector(jrslt, "d11"),
-    s=proc_vector(jrslt, "d10"),
-    i=proc_vector(jrslt, "d13")
+    t=.JD3_ENV$proc_vector(jrslt, "d12"),
+    sa=.JD3_ENV$proc_vector(jrslt, "d11"),
+    s=.JD3_ENV$proc_vector(jrslt, "d10"),
+    i=.JD3_ENV$proc_vector(jrslt, "d13")
   )
   parameters<-list(
     multiplicative=mul, 

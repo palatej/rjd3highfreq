@@ -196,7 +196,7 @@ HolidaysMatrix<-function(holidays, startingDate, length, nonworking=as.integer(7
                type)
 
   return(structure(list(
-                      ptr=matrix_jd2r(jm),
+                      ptr=.JD3_ENV$matrix_jd2r(jm),
                       spec=list(holidays=holidays, startingDate=startingDate, type=type)),
                   class="JDMatrix"))
 }

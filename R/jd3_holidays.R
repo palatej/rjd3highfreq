@@ -1,4 +1,3 @@
-#' @include jd3_rslts.R jd3_ts.R
 #' @import rJava
 NULL
 

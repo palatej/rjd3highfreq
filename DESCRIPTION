@@ -1,14 +1,14 @@
 Package: rjd3highfreq
 Type: Package
 Title: Interface to 'JDemetra+ 3.0' Seasonal Adjustment Software
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
   person("Jean", "Palate", role = c("aut", "cre"),
                 email = "jean.palate@nbb.be"))
 Description: Interface around 'JDemetra+ 3.x' sa-toolkit (<https://github.com/jdemetra/jdemetra-core>), STACE project 
 Depends:
   R (>= 3.6.0),
-  rjd3sts (>= 0.1.0)
+  rjd3sts (>= 0.1.1)
 Imports:
 SystemRequirements: Java SE 8 or higher
 License: EUPL
@@ -21,12 +21,9 @@ RoxygenNote: 7.1.1
 BugReports: https://github.com/jdemetra/rjdemetra3/issues
 Encoding: UTF-8
 Collate: 
-    'jd3_ts.R'
-    'jd3_rslts.R'
     'jd3_holidays.R'
     'holidays.R'
     'jd3_fractionalairline.R'
     'jd3_stl.R'
-    'jd3_utility.R'
     'jd3_x11.R'
     'zzz.R'

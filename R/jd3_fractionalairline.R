@@ -1,4 +1,3 @@
-#' @include jd3_rslts.R
 #' @import rJava
 NULL
 
@@ -8,11 +7,11 @@ ucm_extract<-function(jrslt, cmp){
 }
 
 arima_extract<-function(jrslt, path){
-  str<-proc_str(jrslt, paste0(path, ".name"))
-  ar<-proc_vector(jrslt, paste0(path, ".ar"))
-  delta<-proc_vector(jrslt, paste0(path, ".delta"))
-  ma<-proc_vector(jrslt, paste0(path, ".ma"))
-  var<-proc_numeric(jrslt, paste0(path, ".var"))
+  str<-.JD3_ENV$proc_str(jrslt, paste0(path, ".name"))
+  ar<-.JD3_ENV$proc_vector(jrslt, paste0(path, ".ar"))
+  delta<-.JD3_ENV$proc_vector(jrslt, paste0(path, ".delta"))
+  ma<-.JD3_ENV$proc_vector(jrslt, paste0(path, ".ma"))
+  var<-.JD3_ENV$proc_numeric(jrslt, paste0(path, ".var"))
   return (rjd3modelling::arima.model(str, ar,delta,ma,var))
 }
 
@@ -92,22 +91,24 @@ fractionalAirlineEstimation<-function(y, periods, x = NULL, ndiff=2, mean = FALS
     joutliers<-.jnull("[Ljava/lang/String;")
   else
     joutliers=.jarray(outliers, "java.lang.String")
-  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineEstimation;", "estimate", as.numeric(y), matrix_r2jd(x), mean, .jarray(periods), as.integer(ndiff), joutliers
+  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineEstimation;", "estimate", 
+                as.numeric(y), 
+                .JD3_ENV$matrix_r2jd(x), mean, .jarray(periods), as.integer(ndiff), joutliers
                 , criticalValue, precision, approximateHessian)
   model<-list(
     y=as.numeric(y),
-    variables=proc_vector(jrslt, "variables"),
-    X=proc_matrix(jrslt, "regressors"),
-    b=proc_vector(jrslt, "b"),
-    bcov=proc_matrix(jrslt, "bvar"),
-    linearized=proc_vector(jrslt, "lin")
+    variables=.JD3_ENV$proc_vector(jrslt, "variables"),
+    X=.JD3_ENV$proc_matrix(jrslt, "regressors"),
+    b=.JD3_ENV$proc_vector(jrslt, "b"),
+    bcov=.JD3_ENV$proc_matrix(jrslt, "bvar"),
+    linearized=.JD3_ENV$proc_vector(jrslt, "lin")
   )
   estimation<-list(
-    parameters=proc_vector(jrslt, "parameters"),
-    score=proc_vector(jrslt, "score"),
-    covariance=proc_matrix(jrslt, "pcov")
+    parameters=.JD3_ENV$proc_vector(jrslt, "parameters"),
+    score=.JD3_ENV$proc_vector(jrslt, "score"),
+    covariance=.JD3_ENV$proc_matrix(jrslt, "pcov")
   )
-  likelihood<-proc_likelihood(jrslt, "likelihood.")
+  likelihood<-.JD3_ENV$proc_likelihood(jrslt, "likelihood.")
   
   return(structure(list(
     model=model,
@@ -200,25 +201,25 @@ fractionalAirlineDecomposition.ssf<-function(jdecomp){
 jd2r_multiAirlineDecomposition<-function(jrslt, stde=F){
   
   #ucarima model
-  ncmps<-proc_int(jrslt, "ucarima.size")
+  ncmps<-.JD3_ENV$proc_int(jrslt, "ucarima.size")
   model<-arima_extract(jrslt, "ucarima.model")
   cmps<-lapply(1:ncmps, function(cmp){return (ucm_extract(jrslt, cmp))})
   ucarima<-rjd3modelling::ucarima.model(model, cmps)
   
-  yc<-proc_vector(jrslt, "y")
+  yc<-.JD3_ENV$proc_vector(jrslt, "y")
   estimation<-list(
-    parameters=proc_vector(jrslt, "parameters"),
-    score=proc_vector(jrslt, "score"),
-    covariance=proc_matrix(jrslt, "pcov")
+    parameters=.JD3_ENV$proc_vector(jrslt, "parameters"),
+    score=.JD3_ENV$proc_vector(jrslt, "score"),
+    covariance=.JD3_ENV$proc_matrix(jrslt, "pcov")
   )
-  likelihood<-proc_likelihood(jrslt, "likelihood.")
-  ncmps<-proc_int(jrslt, "ncmps")
+  likelihood<-.JD3_ENV$proc_likelihood(jrslt, "likelihood.")
+  ncmps<-.JD3_ENV$proc_int(jrslt, "ncmps")
   if (stde){
-    decomposition<-lapply((1:ncmps), function(j){return (cbind(proc_vector(jrslt, paste0("cmp(",j, ")")),
-                                                               proc_vector(jrslt, paste0("cmp_stde(",j, ")"))  ))})
+    decomposition<-lapply((1:ncmps), function(j){return (cbind(.JD3_ENV$proc_vector(jrslt, paste0("cmp(",j, ")")),
+                                                               .JD3_ENV$proc_vector(jrslt, paste0("cmp_stde(",j, ")"))  ))})
     decomposition<-list(cmps=cmps, cmps.stde=cmps.stde)
   }else{
-    decomposition<-lapply((1:ncmps), function(j){return (proc_vector(jrslt, paste0("cmp(",j, ")")))})
+    decomposition<-lapply((1:ncmps), function(j){return (.JD3_ENV$proc_vector(jrslt, paste0("cmp(",j, ")")))})
   }
   
   return(structure(list(
@@ -242,21 +243,21 @@ jd2r_multiAirlineDecomposition<-function(jrslt, stde=F){
 #' @examples
 jd2r_fractionalAirlineDecomposition<-function(jrslt, sn=F, stde=F){
   #ucarima model
-  ncmps<-proc_int(jrslt, "ucarima.size")
+  ncmps<-.JD3_ENV$proc_int(jrslt, "ucarima.size")
   model<-arima_extract(jrslt, "ucarima.model")
   cmps<-lapply(1:ncmps, function(cmp){return (ucm_extract(jrslt, cmp))})
   ucarima<-rjd3modelling::ucarima.model(model, cmps)
   
-  yc<-proc_vector(jrslt, "y")
-  sa<-proc_vector(jrslt, "sa")
-  s<-proc_vector(jrslt, "s")
+  yc<-.JD3_ENV$proc_vector(jrslt, "y")
+  sa<-.JD3_ENV$proc_vector(jrslt, "sa")
+  s<-.JD3_ENV$proc_vector(jrslt, "s")
   if (sn){
     if (stde){
       decomposition<-list(
         y=yc,
         sa=sa,
         s=s,
-        s.stde=proc_vector(jrslt, "s_stde")
+        s.stde=.JD3_ENV$proc_vector(jrslt, "s_stde")
       )
     }else{
       decomposition<-list(
@@ -266,8 +267,8 @@ jd2r_fractionalAirlineDecomposition<-function(jrslt, sn=F, stde=F){
       )
     }
   }else{
-    t<-proc_vector(jrslt, "t")
-    i<-proc_vector(jrslt, "i")
+    t<-.JD3_ENV$proc_vector(jrslt, "t")
+    i<-.JD3_ENV$proc_vector(jrslt, "i")
     if (stde){
       decomposition<-list(
         y=yc,
@@ -275,9 +276,9 @@ jd2r_fractionalAirlineDecomposition<-function(jrslt, sn=F, stde=F){
         sa=sa,
         s=s,
         i=i,
-        t.stde=proc_vector(jrslt, "t_stde"),
-        s.stde=proc_vector(jrslt, "s_stde"),
-        i.stde=proc_vector(jrslt, "i_stde")
+        t.stde=.JD3_ENV$proc_vector(jrslt, "t_stde"),
+        s.stde=.JD3_ENV$proc_vector(jrslt, "s_stde"),
+        i.stde=.JD3_ENV$proc_vector(jrslt, "i_stde")
       )
     }else{
       decomposition<-list(
@@ -291,11 +292,11 @@ jd2r_fractionalAirlineDecomposition<-function(jrslt, sn=F, stde=F){
     }
   }
   estimation<-list(
-    parameters=proc_vector(jrslt, "parameters"),
-    score=proc_vector(jrslt, "score"),
-    covariance=proc_matrix(jrslt, "pcov")
+    parameters=.JD3_ENV$proc_vector(jrslt, "parameters"),
+    score=.JD3_ENV$proc_vector(jrslt, "score"),
+    covariance=.JD3_ENV$proc_matrix(jrslt, "pcov")
   )
-  likelihood<-proc_likelihood(jrslt, "likelihood.")
+  likelihood<-.JD3_ENV$proc_likelihood(jrslt, "likelihood.")
   
   return(structure(list(
     ucarima=ucarima,
