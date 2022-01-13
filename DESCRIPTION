@@ -21,8 +21,6 @@ RoxygenNote: 7.1.1
 BugReports: https://github.com/jdemetra/rjdemetra3/issues
 Encoding: UTF-8
 Collate: 
-    'jd3_holidays.R'
-    'holidays.R'
     'jd3_fractionalairline.R'
     'jd3_stl.R'
     'jd3_x11.R'

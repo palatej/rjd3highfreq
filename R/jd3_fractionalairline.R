@@ -53,14 +53,14 @@ fractionalAirlineDecomposition<-function(y, period, sn=F, stde=F, nbcasts=0, nfc
 #' @export
 #'
 #' @examples
-multiAirlineDecomposition<-function(y, periods, ndiff=2, stde=F, nbcasts=0, nfcasts=0){
+multiAirlineDecomposition<-function(y, periods, ndiff=2, ar=F, stde=F, nbcasts=0, nfcasts=0){
   if (length(periods) == 1){
     return (fractionalAirlineDecomposition(y, periods, stde=stde, nbcasts = nbcasts, nfcasts = nfcasts))
   }
   checkmate::assertNumeric(y, null.ok = F)
   
   jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineDecomposition;", "decompose", as.numeric(y), 
-                .jarray(periods), as.integer(ndiff), stde, as.integer(nbcasts), as.integer(nfcasts))
+                .jarray(periods), as.integer(ndiff), ar, stde, as.integer(nbcasts), as.integer(nfcasts))
   
   if (length(periods) == 1){
     return (jd2r_fractionalAirlineDecomposition(jrslt, F, stde))
@@ -82,7 +82,7 @@ multiAirlineDecomposition<-function(y, periods, ndiff=2, stde=F, nbcasts=0, nfca
 #' @export
 #'
 #' @examples
-fractionalAirlineEstimation<-function(y, periods, x = NULL, ndiff=2, mean = FALSE, outliers=NULL, criticalValue=6, precision=1e-12, approximateHessian=F){
+fractionalAirlineEstimation<-function(y, periods, x = NULL, ndiff=2, ar=F, mean = FALSE, outliers=NULL, criticalValue=6, precision=1e-12, approximateHessian=F){
   checkmate::assertNumeric(y, null.ok = F)
   checkmate::assertNumeric(criticalValue, len = 1, null.ok = F)
   checkmate::assertNumeric(precision, len = 1, null.ok = F)
@@ -93,7 +93,7 @@ fractionalAirlineEstimation<-function(y, periods, x = NULL, ndiff=2, mean = FALS
     joutliers=.jarray(outliers, "java.lang.String")
   jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineEstimation;", "estimate", 
                 as.numeric(y), 
-                .JD3_ENV$matrix_r2jd(x), mean, .jarray(periods), as.integer(ndiff), joutliers
+                .JD3_ENV$matrix_r2jd(x), mean, .jarray(periods), as.integer(ndiff), ar, joutliers
                 , criticalValue, precision, approximateHessian)
   model<-list(
     y=as.numeric(y),
@@ -131,11 +131,11 @@ fractionalAirlineEstimation<-function(y, periods, x = NULL, ndiff=2, mean = FALS
 #' @export
 #'
 #' @examples
-multiAirlineDecomposition.raw<-function(y, periods, ndiff=2, stde=F, nbcasts=0, nfcasts=0){
+multiAirlineDecomposition.raw<-function(y, periods, ndiff=2, ar=F, stde=F, nbcasts=0, nfcasts=0){
   checkmate::assertNumeric(y, null.ok = F)
   
   jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ldemetra/highfreq/FractionalAirlineDecomposition;", "decompose", as.numeric(y), 
-                .jarray(periods), as.integer(ndiff), stde, as.integer(nbcasts), as.integer(nfcasts))
+                .jarray(periods), as.integer(ndiff), ar, stde, as.integer(nbcasts), as.integer(nfcasts))
   
   return (jrslt)
 }

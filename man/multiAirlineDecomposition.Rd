@@ -8,6 +8,7 @@ multiAirlineDecomposition(
   y,
   periods,
   ndiff = 2,
+  ar = F,
   stde = F,
   nbcasts = 0,
   nfcasts = 0
