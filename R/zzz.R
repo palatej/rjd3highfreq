@@ -1,5 +1,6 @@
 
 .onLoad <- function(libname, pkgname) {
+  suppressMessages(require(rjd3sts, quietly = T))
   result <- .jpackage(pkgname, lib.loc=libname)
   if (!result) stop("Loading java packages failed")
 
