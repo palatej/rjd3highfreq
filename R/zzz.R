@@ -1,11 +1,13 @@
+#' @imclude utils.R
 
 .onLoad <- function(libname, pkgname) {
-  suppressMessages(require(rjd3sts, quietly = T))
+  if (! requireNamespace("rjd3sts", quietly=T)) stop("Loading rjd3 libraries failed")
+
   result <- .jpackage(pkgname, lib.loc=libname)
   if (!result) stop("Loading java packages failed")
 
   proto.dir <- system.file("proto", package = pkgname)
-  readProtoFiles2(protoPath = proto.dir)
+  RProtoBuf::readProtoFiles2(protoPath = proto.dir)
   
   # reload extractors
   .jcall("demetra/information/InformationExtractors", "V", "reloadExtractors")
