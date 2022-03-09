@@ -217,7 +217,6 @@ jd2r_multiAirlineDecomposition<-function(jrslt, stde=F){
   if (stde){
     decomposition<-lapply((1:ncmps), function(j){return (cbind(rjd3toolkit:::proc_vector(jrslt, paste0("cmp(",j, ")")),
                                                                rjd3toolkit:::proc_vector(jrslt, paste0("cmp_stde(",j, ")"))  ))})
-    decomposition<-list(cmps=cmps, cmps.stde=cmps.stde)
   }else{
     decomposition<-lapply((1:ncmps), function(j){return (rjd3toolkit:::proc_vector(jrslt, paste0("cmp(",j, ")")))})
   }
