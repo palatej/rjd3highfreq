@@ -7,11 +7,11 @@ ucm_extract<-function(jrslt, cmp){
 }
 
 arima_extract<-function(jrslt, path){
-  str<-rjd3toolkit:::proc_str(jrslt, paste0(path, ".name"))
-  ar<-rjd3toolkit:::proc_vector(jrslt, paste0(path, ".ar"))
-  delta<-rjd3toolkit:::proc_vector(jrslt, paste0(path, ".delta"))
-  ma<-rjd3toolkit:::proc_vector(jrslt, paste0(path, ".ma"))
-  var<-rjd3toolkit:::proc_numeric(jrslt, paste0(path, ".var"))
+  str<-rjd3toolkit::proc_str(jrslt, paste0(path, ".name"))
+  ar<-rjd3toolkit::proc_vector(jrslt, paste0(path, ".ar"))
+  delta<-rjd3toolkit::proc_vector(jrslt, paste0(path, ".delta"))
+  ma<-rjd3toolkit::proc_vector(jrslt, paste0(path, ".ma"))
+  var<-rjd3toolkit::proc_numeric(jrslt, paste0(path, ".var"))
   return (rjd3modelling::arima.model(str, ar,delta,ma,var))
 }
 
@@ -35,7 +35,7 @@ fractionalAirlineDecomposition<-function(y, period, sn=F, stde=F, nbcasts=0, nfc
   checkmate::assertNumeric(y, null.ok = F)
   checkmate::assertNumeric(period, len = 1, null.ok = F)
   checkmate::assertLogical(sn, len = 1, null.ok = F)
-  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/highfreq/FractionalAirlineDecomposition;", "decompose", as.numeric(y), 
+  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/highfreq/LightExtendedAirlineDecomposition;", "decompose", as.numeric(y), 
                 period, sn, stde, as.integer(nbcasts), as.integer(nfcasts))
   return (jd2r_fractionalAirlineDecomposition(jrslt, sn, stde))  
 }
@@ -59,7 +59,7 @@ multiAirlineDecomposition<-function(y, periods, ndiff=2, ar=F, stde=F, nbcasts=0
   }
   checkmate::assertNumeric(y, null.ok = F)
   
-  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/highfreq/FractionalAirlineDecomposition;", "decompose", as.numeric(y), 
+  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/highfreq/LightExtendedAirlineDecomposition;", "decompose", as.numeric(y), 
                 .jarray(periods), as.integer(ndiff), ar, stde, as.integer(nbcasts), as.integer(nfcasts))
   
   if (length(periods) == 1){
@@ -91,24 +91,24 @@ fractionalAirlineEstimation<-function(y, periods, x = NULL, ndiff=2, ar=F, mean 
     joutliers<-.jnull("[Ljava/lang/String;")
   else
     joutliers=.jarray(outliers, "java.lang.String")
-  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/highfreq/FractionalAirlineEstimation;", "estimate", 
+  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/highfreq/ExtendedAirlineEstimation;", "estimate", 
                 as.numeric(y), 
-                rjd3toolkit:::matrix_r2jd(x), mean, .jarray(periods), as.integer(ndiff), ar, joutliers
+                rjd3toolkit::matrix_r2jd(x), mean, .jarray(periods), as.integer(ndiff), ar, joutliers
                 , criticalValue, precision, approximateHessian)
   model<-list(
     y=as.numeric(y),
-    variables=rjd3toolkit:::proc_vector(jrslt, "variables"),
-    X=rjd3toolkit:::proc_matrix(jrslt, "regressors"),
-    b=rjd3toolkit:::proc_vector(jrslt, "b"),
-    bcov=rjd3toolkit:::proc_matrix(jrslt, "bvar"),
-    linearized=rjd3toolkit:::proc_vector(jrslt, "lin")
+    variables=rjd3toolkit::proc_vector(jrslt, "variables"),
+    X=rjd3toolkit::proc_matrix(jrslt, "regressors"),
+    b=rjd3toolkit::proc_vector(jrslt, "b"),
+    bcov=rjd3toolkit::proc_matrix(jrslt, "bvar"),
+    linearized=rjd3toolkit::proc_vector(jrslt, "lin")
   )
   estimation<-list(
-    parameters=rjd3toolkit:::proc_vector(jrslt, "parameters"),
-    score=rjd3toolkit:::proc_vector(jrslt, "score"),
-    covariance=rjd3toolkit:::proc_matrix(jrslt, "pcov")
+    parameters=rjd3toolkit::proc_vector(jrslt, "parameters"),
+    score=rjd3toolkit::proc_vector(jrslt, "score"),
+    covariance=rjd3toolkit::proc_matrix(jrslt, "pcov")
   )
-  likelihood<-rjd3toolkit:::proc_likelihood(jrslt, "likelihood.")
+  likelihood<-rjd3toolkit::proc_likelihood(jrslt, "likelihood.")
   
   return(structure(list(
     model=model,
@@ -134,7 +134,7 @@ fractionalAirlineEstimation<-function(y, periods, x = NULL, ndiff=2, ar=F, mean 
 multiAirlineDecomposition.raw<-function(y, periods, ndiff=2, ar=F, stde=F, nbcasts=0, nfcasts=0){
   checkmate::assertNumeric(y, null.ok = F)
   
-  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/highfreq/FractionalAirlineDecomposition;", "decompose", as.numeric(y), 
+  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/highfreq/LightExtendedAirlineDecomposition;", "decompose", as.numeric(y), 
                 .jarray(periods), as.integer(ndiff), ar, stde, as.integer(nbcasts), as.integer(nfcasts))
   
   return (jrslt)
@@ -170,7 +170,7 @@ fractionalAirlineDecomposition.raw<-function(y, period, sn=F, stde=F, nbcasts=0,
   checkmate::assertNumeric(y, null.ok = F)
   checkmate::assertNumeric(period, len = 1, null.ok = F)
   checkmate::assertLogical(sn, len = 1, null.ok = F)
-  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/highfreq/FractionalAirlineDecomposition;", "decompose", as.numeric(y), 
+  jrslt<-.jcall("demetra/highfreq/r/FractionalAirlineProcessor", "Ljdplus/highfreq/LightExtendedAirlineDecomposition;", "decompose", as.numeric(y), 
                 period, sn, stde, as.integer(nbcasts), as.integer(nfcasts))
   return (jrslt)
 }
@@ -201,24 +201,24 @@ fractionalAirlineDecomposition.ssf<-function(jdecomp){
 jd2r_multiAirlineDecomposition<-function(jrslt, stde=F){
   
   #ucarima model
-  ncmps<-rjd3toolkit:::proc_int(jrslt, "ucarima.size")
+  ncmps<-rjd3toolkit::proc_int(jrslt, "ucarima.size")
   model<-arima_extract(jrslt, "ucarima.model")
   cmps<-lapply(1:ncmps, function(cmp){return (ucm_extract(jrslt, cmp))})
   ucarima<-rjd3modelling::ucarima.model(model, cmps)
   
-  yc<-rjd3toolkit:::proc_vector(jrslt, "y")
+  yc<-rjd3toolkit::proc_vector(jrslt, "y")
   estimation<-list(
-    parameters=rjd3toolkit:::proc_vector(jrslt, "parameters"),
-    score=rjd3toolkit:::proc_vector(jrslt, "score"),
-    covariance=rjd3toolkit:::proc_matrix(jrslt, "pcov")
+    parameters=rjd3toolkit::proc_vector(jrslt, "parameters"),
+    score=rjd3toolkit::proc_vector(jrslt, "score"),
+    covariance=rjd3toolkit::proc_matrix(jrslt, "pcov")
   )
-  likelihood<-rjd3toolkit:::proc_likelihood(jrslt, "likelihood.")
-  ncmps<-rjd3toolkit:::proc_int(jrslt, "ncmps")
+  likelihood<-rjd3toolkit::proc_likelihood(jrslt, "likelihood.")
+  ncmps<-rjd3toolkit::proc_int(jrslt, "ncmps")
   if (stde){
-    decomposition<-lapply((1:ncmps), function(j){return (cbind(rjd3toolkit:::proc_vector(jrslt, paste0("cmp(",j, ")")),
-                                                               rjd3toolkit:::proc_vector(jrslt, paste0("cmp_stde(",j, ")"))  ))})
+    decomposition<-lapply((1:ncmps), function(j){return (cbind(rjd3toolkit::proc_vector(jrslt, paste0("cmp(",j, ")")),
+                                                               rjd3toolkit::proc_vector(jrslt, paste0("cmp_stde(",j, ")"))  ))})
   }else{
-    decomposition<-lapply((1:ncmps), function(j){return (rjd3toolkit:::proc_vector(jrslt, paste0("cmp(",j, ")")))})
+    decomposition<-lapply((1:ncmps), function(j){return (rjd3toolkit::proc_vector(jrslt, paste0("cmp(",j, ")")))})
   }
   
   return(structure(list(
@@ -242,21 +242,21 @@ jd2r_multiAirlineDecomposition<-function(jrslt, stde=F){
 #' @examples
 jd2r_fractionalAirlineDecomposition<-function(jrslt, sn=F, stde=F){
   #ucarima model
-  ncmps<-rjd3toolkit:::proc_int(jrslt, "ucarima.size")
+  ncmps<-rjd3toolkit::proc_int(jrslt, "ucarima.size")
   model<-arima_extract(jrslt, "ucarima.model")
   cmps<-lapply(1:ncmps, function(cmp){return (ucm_extract(jrslt, cmp))})
   ucarima<-rjd3modelling::ucarima.model(model, cmps)
   
-  yc<-rjd3toolkit:::proc_vector(jrslt, "y")
-  sa<-rjd3toolkit:::proc_vector(jrslt, "sa")
-  s<-rjd3toolkit:::proc_vector(jrslt, "s")
+  yc<-rjd3toolkit::proc_vector(jrslt, "y")
+  sa<-rjd3toolkit::proc_vector(jrslt, "sa")
+  s<-rjd3toolkit::proc_vector(jrslt, "s")
   if (sn){
     if (stde){
       decomposition<-list(
         y=yc,
         sa=sa,
         s=s,
-        s.stde=rjd3toolkit:::proc_vector(jrslt, "s_stde")
+        s.stde=rjd3toolkit::proc_vector(jrslt, "s_stde")
       )
     }else{
       decomposition<-list(
@@ -266,8 +266,8 @@ jd2r_fractionalAirlineDecomposition<-function(jrslt, sn=F, stde=F){
       )
     }
   }else{
-    t<-rjd3toolkit:::proc_vector(jrslt, "t")
-    i<-rjd3toolkit:::proc_vector(jrslt, "i")
+    t<-rjd3toolkit::proc_vector(jrslt, "t")
+    i<-rjd3toolkit::proc_vector(jrslt, "i")
     if (stde){
       decomposition<-list(
         y=yc,
@@ -275,9 +275,9 @@ jd2r_fractionalAirlineDecomposition<-function(jrslt, sn=F, stde=F){
         sa=sa,
         s=s,
         i=i,
-        t.stde=rjd3toolkit:::proc_vector(jrslt, "t_stde"),
-        s.stde=rjd3toolkit:::proc_vector(jrslt, "s_stde"),
-        i.stde=rjd3toolkit:::proc_vector(jrslt, "i_stde")
+        t.stde=rjd3toolkit::proc_vector(jrslt, "t_stde"),
+        s.stde=rjd3toolkit::proc_vector(jrslt, "s_stde"),
+        i.stde=rjd3toolkit::proc_vector(jrslt, "i_stde")
       )
     }else{
       decomposition<-list(
@@ -291,11 +291,11 @@ jd2r_fractionalAirlineDecomposition<-function(jrslt, sn=F, stde=F){
     }
   }
   estimation<-list(
-    parameters=rjd3toolkit:::proc_vector(jrslt, "parameters"),
-    score=rjd3toolkit:::proc_vector(jrslt, "score"),
-    covariance=rjd3toolkit:::proc_matrix(jrslt, "pcov")
+    parameters=rjd3toolkit::proc_vector(jrslt, "parameters"),
+    score=rjd3toolkit::proc_vector(jrslt, "score"),
+    covariance=rjd3toolkit::proc_matrix(jrslt, "pcov")
   )
-  likelihood<-rjd3toolkit:::proc_likelihood(jrslt, "likelihood.")
+  likelihood<-rjd3toolkit::proc_likelihood(jrslt, "likelihood.")
   
   return(structure(list(
     ucarima=ucarima,
