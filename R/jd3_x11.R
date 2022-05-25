@@ -35,10 +35,10 @@ x11<-function(y, period, mul=TRUE, trend.horizon=6, trend.degree=2,
                 tkernel, asym, seas0, seas1, extreme.lsig, extreme.usig)
   decomposition<-list(
     y=as.numeric(y),
-    t=rjd3toolkit:::proc_vector(jrslt, "d12"),
-    sa=rjd3toolkit:::proc_vector(jrslt, "d11"),
-    s=rjd3toolkit:::proc_vector(jrslt, "d10"),
-    i=rjd3toolkit:::proc_vector(jrslt, "d13")
+    t=rjd3toolkit::proc_vector(jrslt, "d12"),
+    sa=rjd3toolkit::proc_vector(jrslt, "d11"),
+    s=rjd3toolkit::proc_vector(jrslt, "d10"),
+    i=rjd3toolkit::proc_vector(jrslt, "d13")
   )
   parameters<-list(
     multiplicative=mul, 
