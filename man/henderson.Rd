@@ -2,22 +2,19 @@
 % Please edit documentation in R/jd3_x11.R
 \name{henderson}
 \alias{henderson}
-\title{Title}
+\title{Apply Henderson linear filter}
 \usage{
 henderson(y, length, musgrave = TRUE, ic = 4.5)
 }
 \arguments{
-\item{y}{}
+\item{y}{input time-series.}
 
-\item{length}{}
+\item{length}{length of the Henderson filter.}
 
-\item{musgrave}{}
+\item{musgrave}{Boolean indicating if Musgrave asymmetric filters should be used.}
 
-\item{ic}{}
-}
-\value{
-
+\item{ic}{ic ratio: irregular/trend-cycle.}
 }
 \description{
-Title
+Apply Henderson linear filter
 }

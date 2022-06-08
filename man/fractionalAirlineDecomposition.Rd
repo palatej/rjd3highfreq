@@ -2,7 +2,7 @@
 % Please edit documentation in R/jd3_fractionalairline.R
 \name{fractionalAirlineDecomposition}
 \alias{fractionalAirlineDecomposition}
-\title{Title}
+\title{Perform an Arima Model Based (AMB) decomposition}
 \usage{
 fractionalAirlineDecomposition(
   y,
@@ -14,23 +14,20 @@ fractionalAirlineDecomposition(
 )
 }
 \arguments{
-\item{y}{}
+\item{y}{input time series}
 
-\item{period}{Period of the seasonal component}
+\item{period}{period of the seasonal component, any positive real number.}
 
-\item{sn}{Signal/noise decomposition. The signal is the seasonally adjusted series and the noise the seasonal component}
+\item{sn}{decomposition into signal and noise. The signal is the seasonally adjusted series and the noise the seasonal component.}
 
-\item{stde}{True if standard deviations of the components must be computed. In some cases (memory limits), it is currently not possible to compute them}
+\item{stde}{Boolean: TRUE if standard deviations of the components must be computed. In some cases (memory limits), it is currently not possible to compute them}
 
-\item{nbcasts}{Number of backcasts}
+\item{nbcasts}{number of backcasts.}
 
-\item{nfcasts}{Number of forecasts}
+\item{nfcasts}{number of forecasts.}
 
-\item{adjust}{True if an actual fractional airline model is used. False if the period is rounded to the nearest integer}
-}
-\value{
-
+\item{adjust}{Boolean: TRUE if an actual fractional airline model is used, FALSE if the period is rounded to the nearest integer.}
 }
 \description{
-Title
+Perform an Arima Model Based (AMB) decomposition
 }

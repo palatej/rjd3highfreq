@@ -27,9 +27,6 @@ multiAirlineDecomposition(
 
 \item{nfcasts}{}
 }
-\value{
-
-}
 \description{
 Title
 }

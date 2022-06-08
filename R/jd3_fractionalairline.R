@@ -17,15 +17,15 @@ arima_extract<-function(jrslt, path){
 
 
 
-#' Title
+#' Perform an Arima Model Based (AMB) decomposition
 #'
-#' @param y 
-#' @param period Period of the seasonal component
-#' @param adjust True if an actual fractional airline model is used. False if the period is rounded to the nearest integer
-#' @param sn Signal/noise decomposition. The signal is the seasonally adjusted series and the noise the seasonal component
-#' @param stde True if standard deviations of the components must be computed. In some cases (memory limits), it is currently not possible to compute them
-#' @param nbcasts Number of backcasts
-#' @param nfcasts Number of forecasts
+#' @param y input time series 
+#' @param period period of the seasonal component, any positive real number.
+#' @param adjust Boolean: TRUE if an actual fractional airline model is used, FALSE if the period is rounded to the nearest integer.
+#' @param sn decomposition into signal and noise. The signal is the seasonally adjusted series and the noise the seasonal component.
+#' @param stde Boolean: TRUE if standard deviations of the components must be computed. In some cases (memory limits), it is currently not possible to compute them
+#' @param nbcasts number of backcasts.
+#' @param nfcasts number of forecasts.
 #'
 #' @return
 #' @export

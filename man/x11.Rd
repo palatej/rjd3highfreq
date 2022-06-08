@@ -2,7 +2,7 @@
 % Please edit documentation in R/jd3_x11.R
 \name{x11}
 \alias{x11}
-\title{Title}
+\title{Perform an X-11 like decomposition with any (non integer) periodicity.}
 \usage{
 x11(
   y,
@@ -20,31 +20,28 @@ x11(
 )
 }
 \arguments{
-\item{y}{}
+\item{y}{input time-series.}
 
-\item{period}{}
+\item{period}{Period of the seasonal component, any positive real number.}
 
-\item{mul}{}
+\item{mul}{Boolean indicating if the decomposition mode is multiplicative (TRUE).}
 
-\item{trend.horizon}{}
+\item{trend.horizon}{bandwidth of trend filters.}
 
-\item{trend.degree}{}
+\item{trend.degree}{polynomial order in local trend model.}
 
-\item{trend.kernel}{}
+\item{trend.kernel}{kernel weights in objective function.}
 
-\item{trend.asymmetric}{}
+\item{trend.asymmetric}{truncation type for symmetric filter.}
 
-\item{seas.s0}{}
+\item{seas.s0}{Seasonal filter for B5, C5, D5.}
 
-\item{seas.s1}{}
+\item{seas.s1}{seasonal filter for B10, C10, D10.}
 
-\item{extreme.lsig}{}
+\item{extreme.lsig}{lower boundary used for outlier correction in irregular.}
 
-\item{extreme.usig}{}
-}
-\value{
-
+\item{extreme.usig}{upper boundary used for outlier correction in irregular.}
 }
 \description{
-Title
+Perform an X-11 like decomposition with any (non integer) periodicity.
 }

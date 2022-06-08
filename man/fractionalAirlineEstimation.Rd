@@ -30,9 +30,6 @@ fractionalAirlineEstimation(
 
 \item{criticalValue}{}
 }
-\value{
-
-}
 \description{
 Title
 }

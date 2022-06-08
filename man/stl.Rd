@@ -2,26 +2,23 @@
 % Please edit documentation in R/jd3_stl.R
 \name{stl}
 \alias{stl}
-\title{Title}
+\title{Perform an STL like (based on Loess) decomposition on any periodicity}
 \usage{
 stl(y, period, multiplicative = TRUE, swindow = 7, twindow = 0, robust = TRUE)
 }
 \arguments{
-\item{y}{}
+\item{y}{input time series.}
 
-\item{period}{}
+\item{period}{period, any positive real number.}
 
-\item{multiplicative}{}
+\item{multiplicative}{Boolean indicating if the decomposition mode is multiplicative (TRUE).}
 
-\item{swindow}{}
+\item{swindow}{length of seasonal filter.}
 
-\item{twindow}{}
+\item{twindow}{length of trend filter.}
 
-\item{robust}{}
-}
-\value{
-
+\item{robust}{Boolean: in outer loop robust weights for irregular.}
 }
 \description{
-Title
+Perform an STL like (based on Loess) decomposition on any periodicity
 }

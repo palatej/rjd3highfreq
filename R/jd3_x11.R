@@ -2,19 +2,19 @@
 NULL
 
 
-#' Title
+#' Perform an X-11 like decomposition with any (non integer) periodicity.
 #'
-#' @param y 
-#' @param period 
-#' @param mul 
-#' @param trend.horizon 
-#' @param trend.degree 
-#' @param trend.kernel 
-#' @param trend.asymmetric 
-#' @param seas.s0 
-#' @param seas.s1 
-#' @param extreme.lsig 
-#' @param extreme.usig 
+#' @param y input time-series.
+#' @param period Period of the seasonal component, any positive real number.
+#' @param mul Boolean indicating if the decomposition mode is multiplicative (TRUE).
+#' @param trend.horizon bandwidth of trend filters.
+#' @param trend.degree polynomial order in local trend model.
+#' @param trend.kernel kernel weights in objective function.
+#' @param trend.asymmetric truncation type for symmetric filter.
+#' @param seas.s0 Seasonal filter for B5, C5, D5.
+#' @param seas.s1 seasonal filter for B10, C10, D10.
+#' @param extreme.lsig lower boundary used for outlier correction in irregular.
+#' @param extreme.usig upper boundary used for outlier correction in irregular.
 #'
 #' @return
 #' @export
@@ -56,12 +56,12 @@ x11<-function(y, period, mul=TRUE, trend.horizon=6, trend.degree=2,
     class="JDX11"))
 }
 
-#' Title
+#' Apply Henderson linear filter
 #'
-#' @param y 
-#' @param length 
-#' @param musgrave 
-#' @param ic 
+#' @param y input time-series.
+#' @param length length of the Henderson filter.
+#' @param musgrave Boolean indicating if Musgrave asymmetric filters should be used.
+#' @param ic ic ratio: irregular/trend-cycle.
 #'
 #' @return
 #' @export
@@ -72,14 +72,13 @@ henderson<-function(y, length, musgrave=TRUE, ic=4.5){
 }
 
 # See Proietti-Luati [2008] (Real time estimation in local polynomial regression...) for the terminology
-#' Title
-#'
-#' @param y 
-#' @param horizon 
-#' @param degree 
-#' @param kernel 
-#' @param endpoints 
-#' @param ic 
+#' Apply local polynomials filters.
+#' @param y input time series.
+#' @param horizon horizon (bandwidth) of the symmetric filter.
+#' @param degree degree degree of polynomial.
+#' @param kernel type of kernel weights used.
+#' @param endpoints method for endpoints.
+#' @param ic ic ratio: irregular/trend-cycle.
 #'
 #' @return
 #' @export
