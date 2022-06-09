@@ -2,7 +2,7 @@
 % Please edit documentation in R/jd3_x11.R
 \name{localpolynomials}
 \alias{localpolynomials}
-\title{Title}
+\title{Apply local polynomials filters.}
 \usage{
 localpolynomials(
   y,
@@ -15,21 +15,18 @@ localpolynomials(
 )
 }
 \arguments{
-\item{y}{}
+\item{y}{input time series.}
 
-\item{horizon}{}
+\item{horizon}{horizon (bandwidth) of the symmetric filter.}
 
-\item{degree}{}
+\item{degree}{degree degree of polynomial.}
 
-\item{kernel}{}
+\item{kernel}{type of kernel weights used.}
 
-\item{endpoints}{}
+\item{endpoints}{method for endpoints.}
 
-\item{ic}{}
-}
-\value{
-
+\item{ic}{ic ratio: irregular/trend-cycle.}
 }
 \description{
-Title
+Apply local polynomials filters.
 }

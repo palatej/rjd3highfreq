@@ -9,9 +9,6 @@ multiAirlineDecomposition.ssf(jdecomp)
 \arguments{
 \item{jdecomp}{}
 }
-\value{
-
-}
 \description{
 Title
 }
