@@ -2,7 +2,7 @@
 % Please edit documentation in R/jd3_fractionalairline.R
 \name{fractionalAirlineEstimation}
 \alias{fractionalAirlineEstimation}
-\title{Title}
+\title{Linearize the series with a fractional airline model}
 \usage{
 fractionalAirlineEstimation(
   y,
@@ -18,18 +18,18 @@ fractionalAirlineEstimation(
 )
 }
 \arguments{
-\item{y}{}
+\item{y}{input time series.}
 
-\item{periods}{}
+\item{periods}{vector of periods values of the seasonal component, any positive real numbers.}
 
-\item{x}{}
+\item{x}{matrix of user-defined regression variables (see rjd3modelling for building calendar regressors).}
 
-\item{mean}{}
+\item{mean}{add constant mean to y after differencing.}
 
-\item{outliers}{}
+\item{outliers}{type of outliers sub vector of c("AO","LS","WO")}
 
-\item{criticalValue}{}
+\item{criticalValue}{critical value for automatic outlier detection}
 }
 \description{
-Title
+Linearize the series with a fractional airline model
 }
