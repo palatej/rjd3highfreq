@@ -1,14 +1,14 @@
 #' @imclude utils.R
 NULL
 
-#' Title
+#' Perform an STL like (based on Loess) decomposition on any periodicity
 #'
-#' @param y 
-#' @param period 
-#' @param multiplicative 
-#' @param swindow 
-#' @param twindow 
-#' @param robust 
+#' @param y input time series.
+#' @param period period, any positive real number.
+#' @param multiplicative Boolean indicating if the decomposition mode is multiplicative (TRUE).
+#' @param swindow length of seasonal filter.
+#' @param twindow length of trend filter.
+#' @param robust Boolean: in outer loop robust weights for irregular.
 #'
 #' @return
 #' @export
@@ -37,9 +37,9 @@ stl<-function(y, period, multiplicative=TRUE, swindow=7, twindow=0, robust=TRUE)
     class="JDSTL"))
 }
 
-#' Title
+#' Fit a Loess regression.
 #'
-#' @param y 
+#' @param y input time series.
 #' @param window 
 #' @param degree 
 #' @param jump 

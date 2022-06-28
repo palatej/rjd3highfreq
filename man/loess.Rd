@@ -2,12 +2,12 @@
 % Please edit documentation in R/jd3_stl.R
 \name{loess}
 \alias{loess}
-\title{Title}
+\title{Fit a Loess regression.}
 \usage{
 loess(y, window, degree = 1, jump = 1)
 }
 \arguments{
-\item{y}{}
+\item{y}{input time series.}
 
 \item{window}{}
 
@@ -15,9 +15,6 @@ loess(y, window, degree = 1, jump = 1)
 
 \item{jump}{}
 }
-\value{
-
-}
 \description{
-Title
+Fit a Loess regression.
 }

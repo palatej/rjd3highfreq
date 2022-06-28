@@ -26,9 +26,6 @@ fractionalAirlineDecomposition.raw(
 
 \item{nfcasts}{}
 }
-\value{
-
-}
 \description{
 Title
 }

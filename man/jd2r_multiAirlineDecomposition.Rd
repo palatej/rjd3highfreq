@@ -11,9 +11,6 @@ jd2r_multiAirlineDecomposition(jrslt, stde = F)
 
 \item{stde}{}
 }
-\value{
-
-}
 \description{
 Title
 }

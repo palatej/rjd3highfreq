@@ -13,9 +13,6 @@ jd2r_fractionalAirlineDecomposition(jrslt, sn = F, stde = F)
 
 \item{stde}{}
 }
-\value{
-
-}
 \description{
 Title
 }
