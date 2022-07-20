@@ -1,4 +1,4 @@
-#' @imclude utils.R
+#' @include utils.R
 NULL
 
 ucm_extract<-function(jrslt, cmp){

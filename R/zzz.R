@@ -1,4 +1,4 @@
-#' @imclude utils.R
+#' @include utils.R
 
 .onLoad <- function(libname, pkgname) {
   if (! requireNamespace("rjd3sts", quietly=T)) stop("Loading rjd3 libraries failed")
