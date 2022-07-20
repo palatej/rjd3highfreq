@@ -1,4 +1,4 @@
-#' @imclude utils.R
+#' @include utils.R
 NULL
 
 #' Perform an STL like (based on Loess) decomposition on any periodicity

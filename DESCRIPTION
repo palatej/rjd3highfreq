@@ -5,7 +5,7 @@ Version: 0.3.2
 Authors@R: c(
   person("Jean", "Palate", role = c("aut", "cre"),
                 email = "jean.palate@nbb.be"))
-Description: Interface around 'JDemetra+ 3.x' sa-toolkit (<https://github.com/jdemetra/jdemetra-core>), STACE project 
+Description: Interface around 'JDemetra+ 3.x' sa-toolkit (<https://github.com/jdemetra/jdemetra-core>), STACE project. 
 Depends:
   R (>= 3.6.0)
 Imports:
@@ -13,8 +13,8 @@ Imports:
   RProtoBuf (>= 0.4.17),
   rjd3toolkit (>= 0.3.2),
   rjd3modelling (>= 0.3.2),
-  rjd3sa (>= 0.3.2),
-  rjd3sts (>= 0.3.2)
+  rjd3sts (>= 0.3.2),
+  checkmate
 SystemRequirements: Java SE 8 or higher
 License: EUPL
 URL: https://github.com/jdemetra/rjd3sa
