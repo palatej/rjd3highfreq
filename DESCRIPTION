@@ -1,11 +1,13 @@
 Package: rjd3highfreq
 Type: Package
-Title: Interface to 'JDemetra+ 3.0' Seasonal Adjustment Software
+Title: Seasonal Adjustment of High Frequency Data with 'JDemetra+ 3.0'
 Version: 0.3.2
 Authors@R: c(
   person("Jean", "Palate", role = c("aut", "cre"),
                 email = "jean.palate@nbb.be"))
-Description: Interface around 'JDemetra+ 3.x' sa-toolkit (<https://github.com/jdemetra/jdemetra-core>), STACE project. 
+Description: Interface around 'JDemetra+ 3.x' (<https://github.com/jdemetra/jdemetra-core>) seasonal adjustment software, STACE project.
+ It offers access to several functions around the seasonal adjustment of high frequency data time series: 
+ STL, Loess, fractional airline and extension of X-11.
 Depends:
   R (>= 3.6.0)
 Imports:
